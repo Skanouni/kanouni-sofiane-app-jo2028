@@ -88,7 +88,7 @@ if (!isset($_SESSION['csrf_token'])) {
                     echo "<td>" . htmlspecialchars($row['heure_epreuve'], ENT_QUOTES, 'UTF-8') . "</td>";
                     echo "<td>" . htmlspecialchars($row['nom_lieu'], ENT_QUOTES, 'UTF-8') . "</td>";
                     echo "<td><button onclick='openModifySportForm({$row['id_epreuve']})'>Modifier</button></td>";
-                    echo "<td><button onclick='deleteSportConfirmation({$row['id_epreuve']})'>Supprimer</button></td>";
+                    echo "<td><button onclick='deleteEpreuveConfirmation({$row['id_epreuve']})'>Supprimer</button></td>";
                     echo "</tr>";
                 }
 
@@ -121,8 +121,8 @@ if (!isset($_SESSION['csrf_token'])) {
             window.location.href = 'modify-events.php?id_epreuve=' + id_epreuve;
         }
 
-        function deleteSportConfirmation(id_epreuve) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer ce sport?")) {
+        function deleteEpreuveConfirmation(id_epreuve) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer ce épreuve?")) {
                 window.location.href = 'delete-events.php?id_epreuve=' + id_epreuve;
             }
         }

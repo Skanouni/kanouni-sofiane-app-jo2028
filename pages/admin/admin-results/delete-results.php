@@ -22,22 +22,22 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // Génère un token CSRF sécurisé
 }
 
-// Vérifiez si l'ID du sport est fourni dans l'URL
+// Vérifiez si l'ID du résultat est fourni dans l'URL
 if (!isset($_GET['id_sport'])) {
-    $_SESSION['error'] = "ID du sport manquant.";
+    $_SESSION['error'] = "ID du résultat manquant.";
     header("Location: manage-results.php");
     exit();
 } else {
     $id_sport = filter_input(INPUT_GET, 'id_sport', FILTER_VALIDATE_INT);
 
-    // Vérifiez si l'ID du sport est un entier valide
+    // Vérifiez si l'ID du résultat est un entier valide
     if ($id_sport === false) {
-        $_SESSION['error'] = "ID du sport invalide.";
+        $_SESSION['error'] = "ID du résultat invalide.";
         header("Location: manage-results.php");
         exit();
     } else {
         try {
-            // Préparez la requête SQL pour supprimer le sport
+            // Préparez la requête SQL pour supprimer le résultat
             $sql = "DELETE FROM SPORT WHERE id_sport = :id_sport";
             // Exécutez la requête SQL avec le paramètre
             $statement = $connexion->prepare($sql);
@@ -45,13 +45,13 @@ if (!isset($_GET['id_sport'])) {
             $statement->execute();
 
             // Message de succès
-            $_SESSION['success'] = "Le sport a été supprimé avec succès.";
+            $_SESSION['success'] = "Le résultat a été supprimé avec succès.";
 
             // Redirigez vers la page précédente après la suppression
             header('Location: manage-results.php');
             exit();
         } catch (PDOException $e) {
-            $_SESSION['error'] = "Erreur lors de la suppression du sport : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+            $_SESSION['error'] = "Erreur lors de la suppression du résultat : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
             header('Location: manage-results.php');
             exit();
         }

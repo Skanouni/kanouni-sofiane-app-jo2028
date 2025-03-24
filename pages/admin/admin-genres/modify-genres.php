@@ -8,18 +8,18 @@ if (!isset($_SESSION['login'])) {
     exit();
 }
 
-// Vérifiez si l'ID du sport est fourni dans l'URL
+// Vérifiez si l'ID du genre est fourni dans l'URL
 if (!isset($_GET['id_genre'])) {
-    $_SESSION['error'] = "ID du sport manquant.";
+    $_SESSION['error'] = "ID du genre manquant.";
     header("Location: manage-genres.php");
     exit();
 }
 
 $id_genre = filter_input(INPUT_GET, 'id_genre', FILTER_VALIDATE_INT);
 
-// Vérifiez si l'ID du sport est un entier valide
+// Vérifiez si l'ID du genre est un entier valide
 if (!$id_genre && $id_genre !== 0) {
-    $_SESSION['error'] = "ID du sport invalide.";
+    $_SESSION['error'] = "ID du genre invalide.";
     header("Location: manage-genres.php");
     exit();
 }
@@ -29,7 +29,7 @@ if (isset($_SESSION['success'])) {
     unset($_SESSION['success']);
 }
 
-// Récupérez les informations du sport pour affichage dans le formulaire
+// Récupérez les informations du genre pour affichage dans le formulaire
 try {
     $querySport = "SELECT nom_genre FROM GENRE WHERE id_genre = :idGenre";
     $statementGenre = $connexion->prepare($querySport);
@@ -37,9 +37,9 @@ try {
     $statementGenre->execute();
 
     if ($statementGenre->rowCount() > 0) {
-        $sport = $statementGenre->fetch(PDO::FETCH_ASSOC);
+        $genre = $statementGenre->fetch(PDO::FETCH_ASSOC);
     } else {
-        $_SESSION['error'] = "Sport non trouvé.";
+        $_SESSION['error'] = "Genre non trouvé.";
         header("Location: manage-genres.php");
         exit();
     }
@@ -54,15 +54,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Assurez-vous d'obtenir des données sécurisées et filtrées
     $nomGenre = filter_input(INPUT_POST, 'nomGenre', FILTER_SANITIZE_SPECIAL_CHARS);
 
-    // Vérifiez si le nom du sport est vide
+    // Vérifiez si le nom du genre est vide
     if (empty($nomGenre)) {
-        $_SESSION['error'] = "Le nom du sport ne peut pas être vide.";
+        $_SESSION['error'] = "Le nom du genre ne peut pas être vide.";
         header("Location: modify-genres.php?id_genre=$id_genre");
         exit();
     }
 
     try {
-        // Vérifiez si le sport existe déjà
+        // Vérifiez si le genre existe déjà
         $queryCheck = "SELECT id_genre FROM GENRE WHERE nom_genre = :nomGenre AND id_genre <> :idGenre";
         $statementCheck = $connexion->prepare($queryCheck);
         $statementCheck->bindParam(":nomGenre", $nomGenre, PDO::PARAM_STR);
@@ -70,12 +70,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $statementCheck->execute();
 
         if ($statementCheck->rowCount() > 0) {
-            $_SESSION['error'] = "Le sport existe déjà.";
+            $_SESSION['error'] = "Le genre existe déjà.";
             header("Location: modify-genres.php?id_genre=$id_genre");
             exit();
         }
 
-        // Requête pour mettre à jour le sport
+        // Requête pour mettre à jour le genre
         $query = "UPDATE GENRE SET nom_genre = :nomGenre WHERE id_genre = :idGenre";
         $statement = $connexion->prepare($query);
         $statement->bindParam(":nomGenre", $nomGenre, PDO::PARAM_STR);
@@ -83,11 +83,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Exécutez la requête
         if ($statement->execute()) {
-            $_SESSION['success'] = "Le sport a été modifié avec succès.";
+            $_SESSION['success'] = "Le genre a été modifié avec succès.";
             header("Location: manage-genres.php");
             exit();
         } else {
-            $_SESSION['error'] = "Erreur lors de la modification du sport.";
+            $_SESSION['error'] = "Erreur lors de la modification du genre.";
             header("Location: modify-genres.php?id_genre=$id_genre");
             exit();
         }
@@ -148,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             onsubmit="return confirm('Êtes-vous sûr de vouloir modifier ce genre?')">
             <label for="nomGenre">Nom du Sport :</label>
             <input type="text" name="nomGenre" id="nomGenre"
-                value="<?php echo htmlspecialchars($sport['nom_genre']); ?>" required>
+                value="<?php echo htmlspecialchars($genre['nom_genre']); ?>" required>
             <input type="submit" value="Modifier le Genre">
         </form>
 

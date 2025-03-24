@@ -115,7 +115,7 @@ if (!isset($_SESSION['csrf_token'])) {
         }
 
         function deleteCountryConfirmation(id_pays) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer ce sport?")) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer ce pays?")) {
                 window.location.href = 'delete-countries.php?id_pays=' + id_pays;
             }
         }

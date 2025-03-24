@@ -121,7 +121,7 @@ if (!isset($_SESSION['csrf_token'])) {
         }
 
         function deleteAthleteConfirmation(id_athlete) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer ce sport?")) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer ce athlete?")) {
                 window.location.href = 'delete-athletes.php?id_athlete=' + id_athlete;
             }
         }

@@ -49,7 +49,7 @@ try {
     exit();
 }
 
-// Récupérez les options de lieu et de sport
+// Récupérez les options de lieu et de épreuve
 $queryLieu = "SELECT * FROM LIEU";
 $statementLieu = $connexion->prepare($queryLieu);
 $statementLieu->execute();
@@ -209,9 +209,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             <label for="idSport">Sport :</label>
             <select name="idSport" id="idSport" required>
-                <?php foreach ($sportOptions as $sport): ?>
-                    <option value="<?php echo $sport['id_sport']; ?>" <?php if ($sport['id_sport'] == $epreuve['id_sport']) echo 'selected'; ?>>
-                        <?php echo htmlspecialchars($sport['nom_sport']); ?>
+                <?php foreach ($sportOptions as $épreuve): ?>
+                    <option value="<?php echo $épreuve['id_sport']; ?>" <?php if ($épreuve['id_sport'] == $epreuve['id_sport']) echo 'selected'; ?>>
+                        <?php echo htmlspecialchars($épreuve['nom_sport']); ?>
                     </option>
                 <?php endforeach; ?>
             </select>

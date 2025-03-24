@@ -8,18 +8,18 @@ if (!isset($_SESSION['login'])) {
     exit();
 }
 
-// Vérifiez si l'ID du sport est fourni dans l'URL
+// Vérifiez si l'ID du lieu est fourni dans l'URL
 if (!isset($_GET['id_lieu'])) {
-    $_SESSION['error'] = "ID du sport manquant.";
+    $_SESSION['error'] = "ID du lieu manquant.";
     header("Location: manage-places.php");
     exit();
 }
 
 $id_lieu = filter_input(INPUT_GET, 'id_lieu', FILTER_VALIDATE_INT);
 
-// Vérifiez si l'ID du sport est un entier valide
+// Vérifiez si l'ID du lieu est un entier valide
 if (!$id_lieu && $id_lieu !== 0) {
-    $_SESSION['error'] = "ID du sport invalide.";
+    $_SESSION['error'] = "ID du lieu invalide.";
     header("Location: manage-places.php");
     exit();
 }
@@ -29,7 +29,7 @@ if (isset($_SESSION['success'])) {
     unset($_SESSION['success']);
 }
 
-// Récupérez les informations du sport pour affichage dans le formulaire
+// Récupérez les informations du lieu pour affichage dans le formulaire
 try {
     $queryPlace = "SELECT * FROM LIEU    WHERE id_lieu = :idLieu";
     $statementPlace = $connexion->prepare($queryPlace);
@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $cp_lieu = filter_input(INPUT_POST, 'cp_lieu', FILTER_SANITIZE_SPECIAL_CHARS);
     $ville_lieu = filter_input(INPUT_POST, 'ville_lieu', FILTER_SANITIZE_SPECIAL_CHARS);
 
-    // Vérifiez si le nom du sport est vide
+    // Vérifiez si le nom du lieu est vide
     if (empty($nom_lieu)) {
         $_SESSION['error'] = "Le nom de ce lieu ne peut pas être vide.";
         header("Location: modify-places.php?id_lieu=$id_lieu");
@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        // Vérifiez si le sport existe déjà
+        // Vérifiez si le lieu existe déjà
         $queryCheck = "SELECT id_lieu FROM LIEU WHERE nom_lieu = :nom_lieu AND adresse_lieu = :adresse_lieu AND cp_lieu = :cp_lieu AND ville_lieu = :ville_lieu AND id_lieu <> :idLieu";
         $statementCheck = $connexion->prepare($queryCheck);
         $statementCheck->bindParam(":nom_lieu", $nom_lieu, PDO::PARAM_STR);
@@ -81,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
 
-        // Requête pour mettre à jour le sport
+        // Requête pour mettre à jour le lieu
         $query = "UPDATE LIEU SET nom_lieu = :nom_lieu, adresse_lieu = :adresse_lieu, cp_lieu = :cp_lieu, ville_lieu = :ville_lieu WHERE id_lieu = :idLieu";
         $statement = $connexion->prepare($query);
         $statement->bindParam(":nom_lieu", $nom_lieu, PDO::PARAM_STR);
@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: manage-places.php");
             exit();
         } else {
-            $_SESSION['error'] = "Erreur lors de la modification du sport.";
+            $_SESSION['error'] = "Erreur lors de la modification du lieu.";
             header("Location: modify-places.php?id_lieu=$id_lieu");
             exit();
         }
@@ -154,7 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ?>
 
         <form action="modify-places.php?id_lieu=<?php echo $id_lieu; ?>" method="post"
-            onsubmit="return confirm('Êtes-vous sûr de vouloir modifier ce sport?')">
+            onsubmit="return confirm('Êtes-vous sûr de vouloir modifier ce lieu?')">
             
             <label for="nom_lieu">Nom du Lieu :</label>
             <input type="text" name="nom_lieu" id="nom_lieu"

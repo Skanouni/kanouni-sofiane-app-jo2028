@@ -170,8 +170,8 @@ ini_set("display_errors", 1);
             
             <label for="idSport">Sport :</label>
             <select name="idSport" id="idSport" required>
-                <?php foreach ($sportOptions as $sport): ?>
-                    <option value="<?php echo $sport['id_sport']; ?>"><?php echo htmlspecialchars($sport['nom_sport']); ?></option>
+                <?php foreach ($sportOptions as $épreuve): ?>
+                    <option value="<?php echo $épreuve['id_sport']; ?>"><?php echo htmlspecialchars($épreuve['nom_sport']); ?></option>
                 <?php endforeach; ?>
             </select>
             

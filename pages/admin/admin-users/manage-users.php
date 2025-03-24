@@ -119,7 +119,7 @@ if (!isset($_SESSION['csrf_token'])) {
         }
 
         function deleteUserConfirmation(id_utilisateur) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer ce sport?")) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur?")) {
                 window.location.href = 'delete-users.php?id_utilisateur=' + id_utilisateur;
             }
         }

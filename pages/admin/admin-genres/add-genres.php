@@ -25,37 +25,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Vérifiez si le nom du sport est vide
+    // Vérifiez si le nom du genre est vide
     if (empty($nomGenre)) {
-        $_SESSION['error'] = "Le nom du sport ne peut pas être vide.";
+        $_SESSION['error'] = "Le nom du genre ne peut pas être vide.";
         header("Location: add-genres.php");
         exit();
     }
 
     try {
-        // Vérifiez si le sport existe déjà
+        // Vérifiez si le genre existe déjà
         $queryCheck = "SELECT id_genre FROM GENRE WHERE nom_genre = :nomGenre";
         $statementCheck = $connexion->prepare($queryCheck);
         $statementCheck->bindParam(":nomGenre", $nomGenre, PDO::PARAM_STR);
         $statementCheck->execute();
 
         if ($statementCheck->rowCount() > 0) {
-            $_SESSION['error'] = "Le sport existe déjà.";
+            $_SESSION['error'] = "Le genre existe déjà.";
             header("Location: add-genres.php");
             exit();
         } else {
-            // Requête pour ajouter un sport
+            // Requête pour ajouter un genre
             $query = "INSERT INTO GENRE (nom_genre) VALUES (:nomGenre)";
             $statement = $connexion->prepare($query);
             $statement->bindParam(":nomGenre", $nomGenre, PDO::PARAM_STR);
 
             // Exécutez la requête
             if ($statement->execute()) {
-                $_SESSION['success'] = "Le sport a été ajouté avec succès.";
+                $_SESSION['success'] = "Le genre a été ajouté avec succès.";
                 header("Location: manage-genres.php");
                 exit();
             } else {
-                $_SESSION['error'] = "Erreur lors de l'ajout du sport.";
+                $_SESSION['error'] = "Erreur lors de l'ajout du genre.";
                 header("Location: add-genres.php");
                 exit();
             }
@@ -116,7 +116,7 @@ ini_set("display_errors", 1);
             unset($_SESSION['success']);
         }
         ?>
-        <form action="add-genres.php" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir ajouter ce sport ?')">
+        <form action="add-genres.php" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir ajouter ce genre ?')">
             <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
             <label for="nomGenre">Nom du Genre :</label>
             <input type="text" name="nomGenre" id="nomGenre" required>

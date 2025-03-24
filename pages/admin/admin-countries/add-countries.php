@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Vérifiez si le nom du sport est vide
+    // Vérifiez si le nom du pays est vide
     if (empty($nomPays)) {
         $_SESSION['error'] = "Le nom du pays ne peut pas être vide.";
         header("Location: add-countries.php");
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        // Vérifiez si le sport existe déjà
+        // Vérifiez si le pays existe déjà
         $queryCheck = "SELECT id_pays FROM PAYS WHERE nom_pays = :nomPays";
         $statementCheck = $connexion->prepare($queryCheck);
         $statementCheck->bindParam(":nomPays", $nomPays, PDO::PARAM_STR);
@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: add-countries.php");
             exit();
         } else {
-            // Requête pour ajouter un sport
+            // Requête pour ajouter un pays
             $query = "INSERT INTO PAYS (nom_pays) VALUES (:nomPays)";
             $statement = $connexion->prepare($query);
             $statement->bindParam(":nomPays", $nomPays, PDO::PARAM_STR);

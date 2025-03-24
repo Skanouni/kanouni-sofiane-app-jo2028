@@ -22,22 +22,22 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // Génère un token CSRF sécurisé
 }
 
-// Vérifiez si l'ID du sport est fourni dans l'URL
+// Vérifiez si l'ID du pays est fourni dans l'URL
 if (!isset($_GET['id_pays'])) {
-    $_SESSION['error'] = "ID du sport manquant.";
+    $_SESSION['error'] = "ID du pays manquant.";
     header("Location: manage-countries.php");
     exit();
 } else {
     $id_pays = filter_input(INPUT_GET, 'id_pays', FILTER_VALIDATE_INT);
 
-    // Vérifiez si l'ID du sport est un entier valide
+    // Vérifiez si l'ID du pays est un entier valide
     if ($id_pays === false) {
-        $_SESSION['error'] = "ID du sport invalide.";
+        $_SESSION['error'] = "ID du pays invalide.";
         header("Location: manage-countries.php");
         exit();
     } else {
         try {
-            // Préparez la requête SQL pour supprimer le sport
+            // Préparez la requête SQL pour supprimer le pays
             $sql = "DELETE FROM PAYS WHERE id_pays = :id_pays";
             // Exécutez la requête SQL avec le paramètre
             $statement = $connexion->prepare($sql);
@@ -51,7 +51,7 @@ if (!isset($_GET['id_pays'])) {
             header('Location: manage-countries.php');
             exit();
         } catch (PDOException $e) {
-            $_SESSION['error'] = "Erreur lors de la suppression du sport : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+            $_SESSION['error'] = "Erreur lors de la suppression du pays : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
             header('Location: manage-countries.php');
             exit();
         }

@@ -39,7 +39,7 @@ try {
     if ($statementSport->rowCount() > 0) {
         $sport = $statementSport->fetch(PDO::FETCH_ASSOC);
     } else {
-        $_SESSION['error'] = "Sport non trouvé.";
+        $_SESSION['error'] = "Genre non trouvé.";
         header("Location: manage-sports.php");
         exit();
     }

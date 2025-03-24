@@ -93,7 +93,7 @@ if (!isset($_SESSION['csrf_token'])) {
 
                 echo "</table>";
             } else {
-                echo "<p>Aucun sport trouvé.</p>";
+                echo "<p>Aucun résultat trouvé.</p>";
             }
         } catch (PDOException $e) {
             echo "Erreur : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
@@ -121,7 +121,7 @@ if (!isset($_SESSION['csrf_token'])) {
         }
 
         function deleteResultConfirmation(id_athlete,id_epreuve) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer ce sport?")) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer ce résultat?")) {
                 window.location.href = 'delete-results.php?id_athlete=' + id_athlete +'&id_epreuve='+ id_epreuve;
             }
         }

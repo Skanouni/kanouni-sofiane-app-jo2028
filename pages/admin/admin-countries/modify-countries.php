@@ -8,7 +8,7 @@ if (!isset($_SESSION['login'])) {
     exit();
 }
 
-// Vérifiez si l'ID du sport est fourni dans l'URL
+// Vérifiez si l'ID du pays est fourni dans l'URL
 if (!isset($_GET['id_pays'])) {
     $_SESSION['error'] = "ID du pays manquant.";
     header("Location: manage-countries.php");
@@ -17,7 +17,7 @@ if (!isset($_GET['id_pays'])) {
 
 $id_pays = filter_input(INPUT_GET, 'id_pays', FILTER_VALIDATE_INT);
 
-// Vérifiez si l'ID du sport est un entier valide
+// Vérifiez si l'ID du pays est un entier valide
 if (!$id_pays && $id_pays !== 0) {
     $_SESSION['error'] = "ID du pays invalide.";
     header("Location: manage-countries.php");
@@ -29,7 +29,7 @@ if (isset($_SESSION['success'])) {
     unset($_SESSION['success']);
 }
 
-// Récupérez les informations du sport pour affichage dans le formulaire
+// Récupérez les informations du pays pour affichage dans le formulaire
 try {
     $queryPays = "SELECT * FROM PAYS WHERE id_pays = :idPays";
     $statementPays = $connexion->prepare($queryPays);
@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Assurez-vous d'obtenir des données sécurisées et filtrées
     $nomPays = filter_input(INPUT_POST, 'nomPays', FILTER_SANITIZE_SPECIAL_CHARS);
 
-    // Vérifiez si le nom du sport est vide
+    // Vérifiez si le nom du pays est vide
     if (empty($nomPays)) {
         $_SESSION['error'] = "Le nom du pays ne peut pas être vide.";
         header("Location: modify-countries.php?id_pays=$id_pays");
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        // Vérifiez si le sport existe déjà
+        // Vérifiez si le pays existe déjà
         $queryCheck = "SELECT id_pays FROM PAYS WHERE nom_pays = :nomPays AND id_pays <> :idPays";
         $statementCheck = $connexion->prepare($queryCheck);
         $statementCheck->bindParam(":nomPays", $nomPays, PDO::PARAM_STR);
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
 
-        // Requête pour mettre à jour le sport
+        // Requête pour mettre à jour le pays
         $query = "UPDATE PAYS SET nom_pays = :nomPays WHERE id_pays = :idPays";
         $statement = $connexion->prepare($query);
         $statement->bindParam(":nomPays", $nomPays, PDO::PARAM_STR);

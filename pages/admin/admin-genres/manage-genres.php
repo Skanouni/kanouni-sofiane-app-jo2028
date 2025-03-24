@@ -81,13 +81,13 @@ if (!isset($_SESSION['csrf_token'])) {
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($row['nom_genre'], ENT_QUOTES, 'UTF-8') . "</td>";
                     echo "<td><button onclick='openModifySportForm({$row['id_genre']})'>Modifier</button></td>";
-                    echo "<td><button onclick='deleteSportConfirmation({$row['id_genre']})'>Supprimer</button></td>";
+                    echo "<td><button onclick='deleteGenreConfirmation({$row['id_genre']})'>Supprimer</button></td>";
                     echo "</tr>";
                 }
 
                 echo "</table>";
             } else {
-                echo "<p>Aucun sport trouvé.</p>";
+                echo "<p>Aucun genre trouvé.</p>";
             }
         } catch (PDOException $e) {
             echo "Erreur : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
@@ -114,8 +114,8 @@ if (!isset($_SESSION['csrf_token'])) {
             window.location.href = 'modify-genres.php?id_genre=' + id_genre;
         }
 
-        function deleteSportConfirmation(id_genre) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer ce sport?")) {
+        function deleteGenreConfirmation(id_genre) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer ce genre?")) {
                 window.location.href = 'delete-genres.php?id_genre=' + id_genre;
             }
         }

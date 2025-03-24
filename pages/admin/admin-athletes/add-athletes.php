@@ -31,6 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $prenomAthlete = filter_input(INPUT_POST, 'prenomAthlete', FILTER_SANITIZE_SPECIAL_CHARS);
     $idPays = filter_input(INPUT_POST, 'idPays', FILTER_VALIDATE_INT);
     $idGenre = filter_input(INPUT_POST, 'idGenre', FILTER_VALIDATE_INT);
+    $idAthlete = filter_input(INPUT_POST, 'idAthlete', FILTER_VALIDATE_INT);
 
     // Vérification du token CSRF
     if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
@@ -47,20 +48,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        // Vérifiez si l'athlète existe déjà
-        $queryCheck = "SELECT id_athlete 
-                       FROM ATHLETE 
-                       WHERE nom_athlete = :nomAthlete 
-                       AND prenom_athlete = :prenomAthlete 
-                       AND id_pays = :idPays
-                       AND id_genre = :idGenre
-                       AND id_athlete <> :idAthlete";
+        // Vérifiez si l'athlète existe déjà (sans l'ID si c'est un nouvel athlète)
+        if (empty($idAthlete)) {
+            $queryCheck = "SELECT id_athlete 
+                           FROM ATHLETE 
+                           WHERE nom_athlete = :nomAthlete 
+                           AND prenom_athlete = :prenomAthlete 
+                           AND id_pays = :idPays
+                           AND id_genre = :idGenre";
+        } else {
+            // Si l'athlète existe déjà mais qu'on est en mode de modification
+            $queryCheck = "SELECT id_athlete 
+                           FROM ATHLETE 
+                           WHERE nom_athlete = :nomAthlete 
+                           AND prenom_athlete = :prenomAthlete 
+                           AND id_pays = :idPays
+                           AND id_genre = :idGenre
+                           AND id_athlete <> :idAthlete";
+        }
+
         $statementCheck = $connexion->prepare($queryCheck);
         $statementCheck->bindParam(":nomAthlete", $nomAthlete, PDO::PARAM_STR);
         $statementCheck->bindParam(":prenomAthlete", $prenomAthlete, PDO::PARAM_STR);
         $statementCheck->bindParam(":idPays", $idPays, PDO::PARAM_INT);
         $statementCheck->bindParam(":idGenre", $idGenre, PDO::PARAM_INT);
-        $statementCheck->bindParam(":idAthlete", $id_athlete, PDO::PARAM_INT);
+
+        // Lier idAthlete seulement si c'est une modification
+        if (!empty($idAthlete)) {
+            $statementCheck->bindParam(":idAthlete", $idAthlete, PDO::PARAM_INT);
+        }
+
         $statementCheck->execute();
 
         if ($statementCheck->rowCount() > 0) {
@@ -151,9 +168,9 @@ ini_set("display_errors", 1);
             unset($_SESSION['success']);
         }
         ?>
-        <form action="add-athletes.php" method="post"onsubmit="return confirm('Êtes-vous sûr de vouloir ajouter cet athlète?')">
-        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
-        
+        <form action="add-athletes.php" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir ajouter cet athlète?')">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+            
             <label for="nomAthlete">Nom de l'Athlète :</label>
             <input type="text" name="nomAthlete" id="nomAthlete"
                 value="<?php echo isset($athlete['nom_athlete']) ? htmlspecialchars($athlete['nom_athlete']) : ''; ?>" required>
@@ -179,8 +196,7 @@ ini_set("display_errors", 1);
                     </option>
                 <?php endforeach; ?>
             </select>
-
-            <button type="submit">Ajouter l'Athlète</button>
+            <input type="submit" value="Ajouter un Athlète">
         </form>
         <p class="paragraph-link">
             <a class="link-home" href="manage-athletes.php">Retour à la gestion des athletes</a>

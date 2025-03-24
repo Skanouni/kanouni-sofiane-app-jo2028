@@ -22,7 +22,7 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // Génère un token CSRF sécurisé
 }
 
-// Vérifiez si l'ID du sport est fourni dans l'URL
+// Vérifiez si l'ID de l'utilisateur est fourni dans l'URL
 if (!isset($_GET['id_utilisateur'])) {
     $_SESSION['error'] = "ID de l'utilisateur manquant.";
     header("Location: manage-users.php");
@@ -30,7 +30,7 @@ if (!isset($_GET['id_utilisateur'])) {
 } else {
     $id_utilisateur = filter_input(INPUT_GET, 'id_utilisateur', FILTER_VALIDATE_INT);
 
-    // Vérifiez si l'ID du sport est un entier valide
+    // Vérifiez si l'ID de l'utilisateur est un entier valide
     if ($id_utilisateur === false) {
         $_SESSION['error'] = "ID l'utilisateur invalide.";
         header("Location: manage-users.php");
@@ -51,7 +51,7 @@ if (!isset($_GET['id_utilisateur'])) {
             header('Location: manage-users.php');
             exit();
         } catch (PDOException $e) {
-            $_SESSION['error'] = "Erreur lors de la suppression du sport : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+            $_SESSION['error'] = "Erreur lors de la suppression de l'utilisateur : " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
             header('Location: manage-users.php');
             exit();
         }

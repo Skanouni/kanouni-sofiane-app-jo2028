@@ -59,6 +59,7 @@ ini_set("display_errors", 1);
             <a class="link-category" href="./admin-countries/manage-countries.php">Gestion Pays</a>
             <a class="link-category" href="./admin-events/manage-events.php">Gestion Calendrier</a>
             <a class="link-category" href="./admin-athletes/manage-athletes.php">Gestion Athlètes</a>
+            <a class="link-category" href="./admin-genres/manage-genres.php">Gestion Genres</a>
             <a class="link-category" href="./admin-results/manage-results.php">Gestion Résultats</a>
         </p>
     </main>

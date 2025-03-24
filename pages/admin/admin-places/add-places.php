@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Vérifiez si le nom du sport est vide
+    // Vérifiez si le nom du lieu est vide
     if (empty($nomLieu)) {
         $_SESSION['error'] = "Le nom du lieu ne peut pas être vide.";
         header("Location: add-places.php");
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        // Vérifiez si le sport existe déjà
+        // Vérifiez si le lieu existe déjà
         $queryCheck = "SELECT * FROM LIEU WHERE nom_lieu = :nomLieu AND adresse_lieu = :adresseLieu AND cp_lieu = :cpLieu AND ville_lieu = :villeLieu";
         $statementCheck = $connexion->prepare($queryCheck);
         $statementCheck->bindParam(":nomLieu", $nomLieu, PDO::PARAM_STR);
@@ -46,11 +46,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $statementCheck->execute();
 
         if ($statementCheck->rowCount() > 0) {
-            $_SESSION['error'] = "Le sport existe déjà.";
+            $_SESSION['error'] = "Le lieu existe déjà.";
             header("Location: add-places.php");
             exit();
         } else {
-            // Requête pour ajouter un sport
+            // Requête pour ajouter un lieu
             $query = "INSERT INTO LIEU (nom_lieu,adresse_lieu,cp_lieu,ville_lieu) VALUES (:nomLieu,:adresseLieu,:cpLieu,:villeLieu)";
             $statement = $connexion->prepare($query);
             $statement->bindParam(":nomLieu", $nomLieu, PDO::PARAM_STR);
@@ -60,11 +60,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Exécutez la requête
             if ($statement->execute()) {
-                $_SESSION['success'] = "Le sport a été ajouté avec succès.";
+                $_SESSION['success'] = "Le lieu a été ajouté avec succès.";
                 header("Location: manage-places.php");
                 exit();
             } else {
-                $_SESSION['error'] = "Erreur lors de l'ajout du sport.";
+                $_SESSION['error'] = "Erreur lors de l'ajout du lieu.";
                 header("Location: add-places.php");
                 exit();
             }
@@ -125,7 +125,7 @@ ini_set("display_errors", 1);
             unset($_SESSION['success']);
         }
         ?>
-        <form action="add-places.php" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir ajouter ce sport ?')">
+        <form action="add-places.php" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir ajouter ce lieu ?')">
             <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
             
             <label for="nomLieu">Nom du Lieu :</label>

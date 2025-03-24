@@ -86,8 +86,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $queryCheck = "SELECT id_athlete FROM ATHLETE 
                        WHERE nom_athlete = :nomAthlete 
                        AND prenom_athlete = :prenomAthlete 
-                       AND id_pays <> :idPays
-                       AND id_genre <> :idGenre
+                       AND id_pays = :idPays
+                       AND id_genre = :idGenre
                        AND id_athlete <> :idAthlete";
         $statementCheck = $connexion->prepare($queryCheck);
         $statementCheck->bindParam(":nomAthlete", $nomAthlete, PDO::PARAM_STR);
